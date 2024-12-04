@@ -1,4 +1,5 @@
 # Copyright 2021 ForgeFlow (http://www.forgeflow.com)
+# Copyright 2024 Hibou Corp. (https://hibou.io)
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl.html).
 
 from odoo import fields, models
@@ -16,7 +17,8 @@ class AccountExceptionConfirm(models.TransientModel):
     def action_confirm(self):
         self.ensure_one()
         if self.ignore:
-            self.related_model_id.button_draft()
+            if self.related_model_id.state != 'draft':
+                self.related_model_id.button_draft()
             self.related_model_id.ignore_exception = True
             self.related_model_id.action_post()
         return super().action_confirm()
